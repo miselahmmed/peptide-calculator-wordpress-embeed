@@ -1,0 +1,317 @@
+<div id="peptide-pro-clean">
+<style>
+    #peptide-pro-clean {
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        max-width: 950px;
+        margin: 20px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        color: #334155;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    /* GRID LAYOUT */
+    .peptide-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 40px;
+    }
+
+    @media(max-width:850px){
+        .peptide-grid { grid-template-columns: 1fr; gap: 20px; }
+    }
+
+    /* TITLES */
+    .section-title {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #0f172a;
+    }
+
+    /* LEFT SIDE: SYRINGE LIST */
+    .syringe-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .syringe-option {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .syringe-option:hover { border-color: #cbd5e1; }
+
+    .syringe-option.active {
+        border-color: #0ea5e9;
+        background: #f0f9ff;
+    }
+
+    .syringe-option img { width: 150px; height: auto; }
+    .syringe-option span { font-weight: 600; font-size: 14px; }
+
+    /* RIGHT SIDE: INPUTS */
+    .input-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .icon-vial {
+        width: 55px;
+        height: auto;
+        flex-shrink: 0;
+    }
+
+    .input-content { flex-grow: 1; }
+
+    .input-content h3 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    /* BUTTON GROUPS */
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .btn-group button {
+        padding: 8px 14px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        color: #475569;
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .btn-group button.active {
+        background: #0ea5e9;
+        border-color: #0ea5e9;
+        color: #fff;
+    }
+
+    input.custom-input {
+        width: 100%;
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        background: #ffffff; /* Requested white background */
+        color: #1e293b;
+        font-size: 14px;
+    }
+
+    /* RESULT AREA */
+    .result-section {
+        margin-top: 40px;
+        padding: 30px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .result-text {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 20px;
+    }
+
+    /* VISUAL SCALE */
+    .syringe-visual {
+        position: relative;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .scale-img {
+        width: 100%;
+        display: block;
+        position: relative;
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .fill-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0;
+        background: #0ea5e9; /* Sky Blue Fill */
+        opacity: 0.8;
+        z-index: 1;
+        transition: width 0.5s ease-out;
+    }
+</style>
+
+<div class="peptide-grid">
+    <div>
+        <div class="section-title">What is the total volume of your syringe?</div>
+        <div class="syringe-list">
+            <div class="syringe-option active" data-units="30">
+                <img src="https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/syringe-30-units.png">
+                <span>0.3 ml (30 units)</span>
+            </div>
+            <div class="syringe-option" data-units="50">
+                <img src="https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/syringe-50-units.png">
+                <span>0.5 ml (50 units)</span>
+            </div>
+            <div class="syringe-option" data-units="100">
+                <img src="https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/syringe-100-units.png">
+                <span>1.0 ml (100 units)</span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="input-row">
+            <img class="icon-vial" src="https://peptideslab.co.za/wp-content/uploads/2026/04/Data-Set-5.png">
+            <div class="input-content">
+                <h3>Select Peptide Vial Quantity (mg)</h3>
+                <div class="btn-group vial-btns">
+                    <button data-val="5">5 mg</button>
+                    <button data-val="10">10 mg</button>
+                    <button data-val="15">15 mg</button>
+                    <button data-val="other">Other</button>
+                </div>
+                <input class="custom-input vial-input" type="number" placeholder="Enter MG" style="display:none">
+            </div>
+        </div>
+
+        <div class="input-row">
+            <img class="icon-vial" src="https://peptideslab.co.za/wp-content/uploads/2026/04/Data-Set-5fd.png">
+            <div class="input-content">
+                <h3>How much water are you adding? (ml)</h3>
+                <div class="btn-group water-btns">
+                    <button data-val="1">1 ml</button>
+                    <button data-val="2">2 ml</button>
+                    <button data-val="3">3 ml</button>
+                    <button data-val="other">Other</button>
+                </div>
+                <input class="custom-input water-input" type="number" placeholder="Enter ML" style="display:none">
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div style="width:55px"></div> <div class="input-content">
+                <h3>Desired Dose per Injection (mcg)</h3>
+                <div class="btn-group dose-btns">
+                    <button data-val="100">100 mcg</button>
+                    <button data-val="250">250 mcg</button>
+                    <button data-val="500">500 mcg</button>
+                    <button data-val="other">Other</button>
+                </div>
+                <input class="custom-input dose-input" type="number" placeholder="Enter MCG" style="display:none">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="result-section">
+    <div class="result-text">Please select values to calculate...</div>
+    <div class="syringe-visual">
+        <img class="scale-img" src="https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/units-30.png">
+        <div class="fill-overlay"></div>
+    </div>
+</div>
+
+<script>
+(function(){
+    let syringeSize = 30;
+    let vial = 0, water = 0, dose = 0;
+
+    const container = document.getElementById("peptide-pro-clean");
+
+    // Initialize Group Buttons
+    setupInputGroup(".vial-btns", ".vial-input", (val) => vial = val);
+    setupInputGroup(".water-btns", ".water-input", (val) => water = val);
+    setupInputGroup(".dose-btns", ".dose-input", (val) => dose = val);
+
+    // Syringe Toggle Logic
+    container.querySelectorAll(".syringe-option").forEach(opt => {
+        opt.onclick = () => {
+            container.querySelectorAll(".syringe-option").forEach(el => el.classList.remove("active"));
+            opt.classList.add("active");
+            syringeSize = parseFloat(opt.dataset.units);
+            
+            const img = container.querySelector(".scale-img");
+            img.src = `https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/units-${syringeSize}.png`;
+            
+            img.onload = calculate;
+            calculate();
+        };
+    });
+
+    function setupInputGroup(btnGroupClass, inputClass, stateUpdateFunc) {
+        const btns = container.querySelectorAll(btnGroupClass + " button");
+        const input = container.querySelector(inputClass);
+
+        btns.forEach(btn => {
+            btn.onclick = () => {
+                btns.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                if (btn.dataset.val === "other") {
+                    input.style.display = "block";
+                    stateUpdateFunc(parseFloat(input.value) || 0);
+                } else {
+                    input.style.display = "none";
+                    stateUpdateFunc(parseFloat(btn.dataset.val));
+                }
+                calculate();
+            };
+        });
+
+        input.oninput = () => {
+            stateUpdateFunc(parseFloat(input.value) || 0);
+            calculate();
+        };
+    }
+
+    function calculate() {
+        if (!vial || !water || !dose) return;
+
+        const totalMcg = vial * 1000;
+        const concentration = totalMcg / water; 
+        const mlResult = dose / concentration;
+        const unitsResult = mlResult * 100;
+
+        const textDisplay = container.querySelector(".result-text");
+        const fillBar = container.querySelector(".fill-overlay");
+
+        if (unitsResult > syringeSize) {
+            textDisplay.innerHTML = `<span style="color:#ef4444">⚠️ Dose (${unitsResult.toFixed(1)} units) exceeds syringe capacity!</span>`;
+        } else {
+            textDisplay.innerHTML = `To have a dose of <b>${dose} mcg</b> pull the syringe to <b>${unitsResult.toFixed(1)}</b>`;
+        }
+
+        // Scale Logic
+        let start, end;
+        if (syringeSize === 30) { start = 16.5; end = 85.5; }
+        else if (syringeSize === 50) { start = 15.5; end = 84.5; }
+        else { start = 14.5; end = 83.5; }
+
+        let ratio = unitsResult / syringeSize;
+        if (ratio > 1) ratio = 1;
+        const activeArea = end - start;
+        const finalWidthPercent = start + (ratio * activeArea);
+
+        fillBar.style.width = finalWidthPercent + "%";
+    }
+})();
+</script>
+</div>
