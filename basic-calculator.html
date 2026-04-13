@@ -1,0 +1,116 @@
+<div id="peptide-calculator">
+  <style>
+    #peptide-calculator {
+      font-family: Arial, sans-serif;
+      max-width: 550px;
+      margin: auto;
+    }
+
+    #peptide-calculator .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      color: #fff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    #peptide-calculator h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    #peptide-calculator label {
+      display: block;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    #peptide-calculator input,
+    #peptide-calculator select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+
+    #peptide-calculator button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #22c55e;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #peptide-calculator .result {
+      margin-top: 15px;
+      padding: 10px;
+      background: #020617;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+
+  <div class="card">
+    <h2>Peptide Calculator</h2>
+
+    <label>Syringe Size</label>
+    <select class="syringe">
+      <option value="100">100 units (1ml)</option>
+      <option value="50">50 units (0.5ml)</option>
+      <option value="30">30 units (0.3ml)</option>
+    </select>
+
+    <label>Vial MG</label>
+    <input type="number" class="vial" placeholder="e.g. 5">
+
+    <label>Water ML</label>
+    <input type="number" class="water" placeholder="e.g. 2">
+
+    <label>Target Dose (MCG)</label>
+    <input type="number" class="target" placeholder="e.g. 250">
+
+    <button class="calc-btn">Calculate</button>
+
+    <div class="result">Enter values to calculate</div>
+  </div>
+
+  <script>
+    (function() {
+      const container = document.getElementById("peptide-calculator");
+
+      const btn = container.querySelector(".calc-btn");
+      const resultBox = container.querySelector(".result");
+
+      btn.addEventListener("click", function() {
+        const syringeUnits = parseFloat(container.querySelector(".syringe").value);
+        const vialMG = parseFloat(container.querySelector(".vial").value);
+        const waterML = parseFloat(container.querySelector(".water").value);
+        const targetMCG = parseFloat(container.querySelector(".target").value);
+
+        if (!vialMG || !waterML || !targetMCG) {
+          resultBox.innerText = "Please fill all fields";
+          return;
+        }
+
+        const vialMCG = vialMG * 1000;
+        const concentration = vialMCG / waterML;
+        const mlNeeded = targetMCG / concentration;
+        const unitsNeeded = mlNeeded * syringeUnits;
+
+        resultBox.innerHTML =
+          "Draw: " + unitsNeeded.toFixed(2) + " units<br>(" +
+          mlNeeded.toFixed(3) + " ml)";
+      });
+    })();
+  </script>
+</div>
