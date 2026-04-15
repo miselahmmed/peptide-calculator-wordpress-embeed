@@ -107,7 +107,7 @@
         padding: 10px;
         border-radius: 6px;
         border: 1px solid #cbd5e1;
-        background: #ffffff; /* Requested white background */
+        background: #ffffff;
         color: #1e293b;
         font-size: 14px;
     }
@@ -127,6 +127,7 @@
         font-weight: 600;
         color: #0f172a;
         margin-bottom: 20px;
+        line-height: 1.5;
     }
 
     /* VISUAL SCALE */
@@ -151,7 +152,7 @@
         left: 0;
         height: 100%;
         width: 0;
-        background: #0ea5e9; /* Sky Blue Fill */
+        background: #0ea5e9;
         opacity: 0.8;
         z-index: 1;
         transition: width 0.5s ease-out;
@@ -160,18 +161,18 @@
 
 <div class="peptide-grid">
     <div>
-        <div class="section-title">1. What is the total volume of your syringe?</div>
+        <div class="section-title">What is the total volume of your syringe?</div>
         <div class="syringe-list">
             <div class="syringe-option active" data-units="30">
-                <img src="https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/syringe-30-units.png">
+                <img src="https://pawsofcourse.com/wp-content/uploads/2026/04/syringe-30-units.png">
                 <span>0.3 ml (30 units)</span>
             </div>
             <div class="syringe-option" data-units="50">
-                <img src="https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/syringe-50-units.png">
+                <img src="https://pawsofcourse.com/wp-content/uploads/2026/04/syringe-50-units.png">
                 <span>0.5 ml (50 units)</span>
             </div>
             <div class="syringe-option" data-units="100">
-                <img src="https://particlepeptides.com/themes/particlepeptides/assets//img/peptide-calculator/syringe-100-units.png">
+                <img src="https://pawsofcourse.com/wp-content/uploads/2026/04/syringe-100-units.png">
                 <span>1.0 ml (100 units)</span>
             </div>
         </div>
@@ -231,6 +232,9 @@
 
 <script>
 (function(){
+    // CONFIGURATION: Set to false to hide "clicks"
+    const showClicks = false;
+
     let syringeSize = 30;
     let vial = 0, water = 0, dose = 0;
 
@@ -289,6 +293,7 @@
         const concentration = totalMcg / water; 
         const mlResult = dose / concentration;
         const unitsResult = mlResult * 100;
+        const clicksResult = Math.round(unitsResult); // 1 unit = 1 click
 
         const textDisplay = container.querySelector(".result-text");
         const fillBar = container.querySelector(".fill-overlay");
@@ -296,15 +301,17 @@
         if (unitsResult > syringeSize) {
             textDisplay.innerHTML = `<span style="color:#ef4444">⚠️ Dose (${unitsResult.toFixed(1)} units) exceeds syringe capacity!</span>`;
         } else {
-            textDisplay.innerHTML = `To have a dose of <b>${dose} mcg</b> pull the syringe to <b>${unitsResult.toFixed(1)}</b>`;
+            let resultLine = `For a dose of <b>${dose} mcg</b>, draw the syringe to <b>${unitsResult.toFixed(1)} units</b>`;
+            
+            if (showClicks) {
+                resultLine += ` (or <b>${clicksResult} clicks</b>)`;
+            }
+            
+            textDisplay.innerHTML = resultLine;
         }
 
         // Scale Logic
-        let start, end;
-        if (syringeSize === 30) { start = 16.5; end = 85.5; }
-        else if (syringeSize === 50) { start = 15.5; end = 84.5; }
-        else { start = 14.5; end = 83.5; }
-
+        let start = 0.4, end = 100;
         let ratio = unitsResult / syringeSize;
         if (ratio > 1) ratio = 1;
         const activeArea = end - start;
